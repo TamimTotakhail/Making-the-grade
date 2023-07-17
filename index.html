@@ -1,1 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Data</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Student Data</h1>
+    <div id="studentData"></div>
+    <div class="chart-container" id="chartContainer"></div>
 
+    <script>
+        var grades = "jim|25, sue|32, mary|34, ann|22, ted|28, frank|15, lisa|19, mike|30, ahn|26, vishaya|27";
+
+        // Function to capitalize the first letter of a string
+        function capitalizeFirstLetter(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+
+        // Step 1: Parse the data string and store student names and scores in an array
+        var studentDataArray = grades.split(', ');
+
+        // Step 2: Display each student name and score, and capitalize the first letter of the name
+        var studentDataFormatted = "<table><tr><th>Name</th><th>Score</th></tr>";
+        var totalStudents = studentDataArray.length;
+        var totalScore = 0;
+        var lowestScore = Infinity;
+        var highestScore = -Infinity;
+
+        for (var i = 0; i < totalStudents; i++) {
+            var [name, score] = studentDataArray[i].split('|');
+            var capitalizedStudentName = capitalizeFirstLetter(name.trim());
+            var studentScore = parseInt(score.trim());
+
+            // Update lowest and highest scores
+            if (studentScore < lowestScore) {
+                lowestScore = studentScore;
+            }
+            if (studentScore > highestScore) {
+                highestScore = studentScore;
+            }
+
+            // Add the formatted data to the output string
+            studentDataFormatted += "<tr><td>" + capitalizedStudentName + "</td><td>" + studentScore + "</td></tr>";
+
+            // Add the score to the total score
+            totalScore += studentScore;
+        }
+
+        studentDataFormatted += "</table>";
+
+        // Step 3: Calculate the average score
+        var averageScore = totalScore / totalStudents;
+
+        // Step 4: Display the data on the HTML page
+        document.getElementById("studentData").innerHTML = studentDataFormatted;
+        
+        // Step 5: Add the bar chart for student scores
+        var chartContainer = document.getElementById("chartContainer");
+        var barHeightMultiplier = 5; // A multiplier to adjust the bar height for a better visual representation
+
+        for (var i = 0; i < totalStudents; i++) {
+            var [name, score] = studentDataArray[i].split('|');
+            var studentScore = parseInt(score.trim());
+            var bar = document.createElement("div");
+            bar.classList.add("bar");
+            bar.style.height = studentScore * barHeightMultiplier + "px";
+            bar.innerHTML = studentScore;
+            chartContainer.appendChild(bar);
+        }
+
+        // Step 6: Display total number of students, lowest, highest, and average scores
+        document.write("<p>Total number of students: " + totalStudents + "</p>");
+        document.write("<p>Lowest score: " + lowestScore + "</p>");
+        document.write("<p>Highest score: " + highestScore + "</p>");
+        document.write("<p>Average score: " + averageScore.toFixed(2) + "</p>");
+    </script>
+</body>
+</html>
